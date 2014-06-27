@@ -8,22 +8,40 @@ from time import sleep
 class main:
     def __init__(self):
         self.session = requests.session()
+        self.proxysUsed = {}
         self.viewers = int(sys.argv[2])
         self.proxies = open(sys.argv[3], 'r').readlines()
+        for proxy in self.proxies:
+            self.proxysUsed[proxy.strip()] = 0
+        print("[+] Proxies loaded in dict")
         self.username = sys.argv[1]
         self.headers = {'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)'}
         for i in range(self.viewers):
             if i <= self.viewers:
-                gayShit = random.choice(self.proxies).strip()
+                while True:
+                    gayShit = random.choice(self.proxies).strip()
+                    if self.proxysUsed[gayShit] < 10:
+                        break
+                    else:
+                        print("[+] Can't use proxy %s"%gayShit)
+                        continue
+                self.proxysUsed[gayShit] += 1
                 proxy = {'http': gayShit, 'https': gayShit}
                 threading.Thread(target=self.view, args=[proxy]).start()
-                sys.stdout.write('\rViewers Started: %d'%i)
+                sys.stdout.write('\r[+] Viewers Started: %d'%i)
             else:
                 break
+        print("")
+        while True:
+            sys.stdout.write("\r[+] Viewers still running: %d"%threading.activeCount())
+            sleep(0.5)
 
     def view(self, proxy):
+        errors = 0
         mySession = requests.session()
         while True:
+            if errors == 15:
+                return
             try:
                 m3u8Url = self.go(mySession, proxy)
                 for i in range(10):
@@ -33,9 +51,11 @@ class main:
                                      headers=self.headers,
                                      proxies=proxy
                                  )
+                errors -= 1
                 sleep(3)
                 continue
             except:
+                errors += 1
                 sleep(3)
                 continue
 
