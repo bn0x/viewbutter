@@ -50,6 +50,7 @@ class main:
                                      headers=self.headers,
                                      proxies=proxy
                                  )
+                    errors -= 1
                 errors -= 1
                 sleep(3)
                 continue
