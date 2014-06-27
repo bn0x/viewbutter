@@ -23,7 +23,6 @@ class main:
                     if self.proxysUsed[gayShit] < 10:
                         break
                     else:
-                        print("[+] Can't use proxy %s"%gayShit)
                         continue
                 self.proxysUsed[gayShit] += 1
                 proxy = {'http': gayShit, 'https': gayShit}
