@@ -33,7 +33,7 @@ class main:
         print("")
         while True:
             sys.stdout.write("\r[+] Viewers still running: %d"%threading.activeCount())
-            sleep(0.5)
+            sleep(3)
 
     def view(self, proxy):
         errors = 0
