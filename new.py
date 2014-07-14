@@ -29,13 +29,16 @@ class viewbot(object):
                 if errors == 15:
                     return
                 self.m3u8 = self.getM3U8Url()
+                print(self.m3u8)
                 while True:
-                    self.session.get(self.m3u8,
-                                     headers=self.headers,
-                                     proxies=self.proxy,
-                                     verify=False)
-                    errors -= 1
-                    sleep(3)
+                    for i in range(10):
+                        self.session.get(self.m3u8,
+                                         headers=self.headers,
+                                         proxies=self.proxy,
+                                         verify=False)
+                        errors -= 1
+                        sleep(3)
+                    break
             except:
                 errors += 1
                 continue
